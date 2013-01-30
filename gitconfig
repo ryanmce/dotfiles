@@ -1,0 +1,50 @@
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+
+[alias]
+  br = branch -v
+  co = checkout
+  ci = commit
+  di = diff
+  st = status
+  # Show the commits and content in this branch
+  unpushed = log --pretty=oneline origin/master..
+  # Commit changes on *top* of current head as a checkpoint commit
+  cp = commit -am 'cp'
+  # Grep with color and line numbers
+  gr = grep --color -n
+
+[svn]
+  followparent = true
+
+# Dear god, please change these if you borrow my gitconfig
+[user]
+  name  = Ryan McElroy
+  email = ryanmce@gmail.com
+
+[commit]
+	template = /home/ryan/git-template
+
+[push]
+  default = tracking
+
+# Use only for black background terminal
+[color "branch"]
+  current = yellow reverse
+  local = yellow 
+  remote = green
+[color "diff"]
+  plain = white
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+  whitespace = red blink
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+[core]
+	excludesfile = /home/ryan/.gitignore

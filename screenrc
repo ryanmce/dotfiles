@@ -1,0 +1,51 @@
+vbell off
+autodetach on
+startup_message off
+defscrollback 10000
+
+#termcapinfo xterm* ti@:te@              # fix the scroll 
+
+hardstatus alwayslastline
+hardstatus string '%{= kG}%-Lw%{= kW}%50> %n*%f %t%{= kG}%+Lw%< %{= kG}'
+
+
+#bindkey -k F1 prev  # F11
+#bindkey -k F2 next  # F12
+
+# putty & terminal.app
+#bindkey "^[^[OD" prev # alt-left
+#bindkey "^[^[OC" next # alt-right
+
+bindkey "^[[D" prev # ctrl-left
+bindkey "^[[C" next # ctrl-right
+
+# putty
+#bindkey "^[OD" prev # left arrow
+#bindkey "^[OC" next # right arrow
+
+# special build of putty
+bindkey "^[[27;5;9~" next               # Ctrl-Tab
+bindkey "^[[27;6;9~" prev               # Ctrl-Shift-Tab
+
+
+#bindkey "^[0" select 0
+#bindkey "^[1" select 1
+#bindkey "^[2" select 2
+#bindkey "^[3" select 3
+#bindkey "^[4" select 4
+#bindkey "^[5" select 5
+#bindkey "^[6" select 6
+#bindkey "^[7" select 7
+#bindkey "^[8" select 8
+#bindkey "^[9" select 9
+
+
+#screen -t m         5
+#screen -t e4        4
+#screen -t e3        3
+#screen -t e2        2
+#screen -t git       1
+#screen -t errorlog  0
+
+# escape ^zz
+
