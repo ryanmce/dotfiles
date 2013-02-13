@@ -73,6 +73,11 @@ let w:m1=matchadd('BadTab', '\t', -1)
 highlight OverLength ctermbg=darkblue ctermfg=white 
 let w:m2=matchadd('OverLength', '\%>80v.\+', -1)
 
+augroup innodb
+  au BufRead,BufNewFile */innobase/*        set noexpandtab ts=8 sw=8 fo-=r
+  au BufRead,BufNewFile */innodb_plugin/*   set noexpandtab ts=8 sw=8 fo-=r
+augroup END
+
 " remember cursor position
 set viminfo='10,\"100,:20,%,n~/.viminfo
 
