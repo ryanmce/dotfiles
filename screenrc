@@ -8,7 +8,7 @@ defscrollback 10000
 hardstatus alwayslastline
 hardstatus string '%{= kG}%-Lw%{= kW}%50> %n*%f %t%{= kG}%+Lw%< %{= kG}'
 
-defhstatus "screen ^E (^Et) | $PWD@^EH"
+#defhstatus "screen ^E (^Et) | $PWD@^EH"
 
 
 #bindkey -k F1 prev  # F11
