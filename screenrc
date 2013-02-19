@@ -8,6 +8,8 @@ defscrollback 10000
 hardstatus alwayslastline
 hardstatus string '%{= kG}%-Lw%{= kW}%50> %n*%f %t%{= kG}%+Lw%< %{= kG}'
 
+defhstatus "screen ^E (^Et) | $PWD@^EH"
+
 
 #bindkey -k F1 prev  # F11
 #bindkey -k F2 next  # F12
@@ -49,3 +51,5 @@ bindkey "^[[27;6;9~" prev               # Ctrl-Shift-Tab
 
 # escape ^zz
 
+# for ssh agent forwarding
+setenv SSH_AUTH_SOCK "/tmp/ssh-agent-$USER-screen"
