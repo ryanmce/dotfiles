@@ -1,3 +1,9 @@
+[core]
+  excludesfile = ~/.gitignore
+
+[commit]
+  template = ~/git-template
+
 [color]
   diff = auto
   status = auto
@@ -15,17 +21,18 @@
   cp = commit -am 'cp'
   # Grep with color and line numbers
   gr = grep --color -n
+  # hide a branch for later
+  hide = "!f() { git update-ref refs/hidden/$1 $1 && git br -D $1; }; f"
+  unhide = "!f() { git br $1 && git update-ref $1 refs/hidden/$1; }; f"
+  hidden = "!f() { git show-ref | grep hidden; }; f"
+  # update from origin
+  up = pull --rebase
 
 [svn]
   followparent = true
 
-# Dear god, please change these if you borrow my gitconfig
-[user]
-  name  = Ryan McElroy
-  email = ryanmce@gmail.com
-
-[commit]
-	template = /home/ryan/git-template
+[include]
+  path = ~/.git-user
 
 [push]
   default = tracking
@@ -46,5 +53,7 @@
   added = yellow
   changed = green
   untracked = cyan
-[core]
-	excludesfile = /home/ryan/.gitignore
+[diff]
+  tool = vimdiff
+[gc]
+  auto = 0
