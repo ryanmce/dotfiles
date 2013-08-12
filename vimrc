@@ -41,6 +41,7 @@ filetype plugin indent on
 
 " special per-file directives
 augroup filetypes
+  au BufRead,BufNewFile *         set ts=2 sw=2
   au BufRead,BufNewFile *.phpt    set filetype=php
   au BufRead,BufNewFile *.ic      set filetype=c
   au BufRead,BufNewFile *.py      set ts=4 sw=4
