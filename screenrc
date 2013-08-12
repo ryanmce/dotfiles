@@ -26,8 +26,8 @@ bindkey "^[[C" next # ctrl-right
 #bindkey "^[OC" next # right arrow
 
 # special build of putty
-bindkey "^[[27;5;9~" next               # Ctrl-Tab
-bindkey "^[[27;6;9~" prev               # Ctrl-Shift-Tab
+#bindkey "^[[27;5;9~" next               # Ctrl-Tab
+#bindkey "^[[27;6;9~" prev               # Ctrl-Shift-Tab
 
 
 #bindkey "^[0" select 0
