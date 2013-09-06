@@ -27,6 +27,9 @@ set comments=s1:/*,mb:*,ex:*/,://,:#
 " happy scrolling?
 set scrolloff=10
 
+" always show the status line, even in a single file
+set laststatus=2
+
 " blame ftw
 vmap gb :<C-U>!cd $(dirname $(realpath %)) && git blame $(basename %) -L<C-R>=line("'<") <CR>,<C-R>=line("'>") <CR><CR>
 nmap gb :!cd $(dirname $(realpath %)) && git blame $(basename %)<CR>
