@@ -10,6 +10,9 @@ hardstatus string '%{= kG}%-Lw%{= kW}%50> %n*%f %t%{= kG}%+Lw%< %{= kG}'
 
 #defhstatus "screen ^E (^Et) | $PWD@^EH"
 
+# don't resize screen on start
+termcap xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+terminfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
 
 #bindkey -k F1 prev  # F11
 #bindkey -k F2 next  # F12
