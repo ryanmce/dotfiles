@@ -8,6 +8,7 @@ set ruler
 set bs=indent,eol,start
 
 " the greatest colorscheme of all time
+set t_Co=256
 colorscheme torte
 highlight Search ctermbg=darkcyan
 
