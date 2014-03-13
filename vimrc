@@ -47,7 +47,6 @@ nmap <C-@><C-@> :cs find s <C-R>=expand("<cword>")<CR><CR>
 set nocscopetag
 set csto=1
 
-
 filetype plugin indent on
 
 " highlight tabs
@@ -55,7 +54,7 @@ au BufWinEnter * highlight BadTab ctermbg=darkblue
 au BufWinEnter * let w:m1=matchadd('BadTab', '\t', -1)
 
 " highlight long linesa
-au BufWinEnter * highlight ColorColumn ctermbg=236
+au BufWinEnter * highlight ColorColumn ctermbg=235
 au BufWinEnter * set colorcolumn=81
 " au BufWinEnter * highlight OverLength ctermbg=darkblue ctermfg=white 
 " au BufWinEnter * let w:m2=matchadd('OverLength', '\%>80v.\+', -1)
