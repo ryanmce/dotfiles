@@ -5,6 +5,9 @@ defscrollback 10000
 
 #termcapinfo xterm* ti@:te@              # fix the scroll 
 
+# better vim
+altscreen on
+
 hardstatus alwayslastline
 hardstatus string '%{= kG}%-Lw%{= kW}%50> %n*%f %t%{= kG}%+Lw%< %{= kG}'
 
