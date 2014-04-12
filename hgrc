@@ -1,5 +1,5 @@
 [ui]
-username = Ryan McElroy <rmcelroy@fb.com>
+username = Ryan McElroy <ryanmce@gmail.com>
 style = ~/.hg-style
 ignore.system = ~/.hgignore
 merge = vimdiff
@@ -10,8 +10,9 @@ vimdiff.args = -d -c "wincmd J" $output $local $other $base
 vimdiff.premerge = keep
 
 [extensions]
-evolve=
-fbamend=!
+pager =
+#evolve=
+#fbamend=!
 #lz4revlog=!
 
 [alias]
