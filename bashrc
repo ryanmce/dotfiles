@@ -36,10 +36,14 @@ if [ "$PS1" ]; then
 
   # update screen window names with cwd
   case ${TERM} in
-    screen)
-    export PROMPT_COMMAND='echo -ne "\033k$(hostname -s):$(basename "$PWD")\033\\"'
-    ;;
+    screen*)
+      export PROMPT_COMMAND='echo -ne "\033k$(basename "$PWD")\033\\"'
+      ;;
+    *)
+      export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}\007"'
+      ;;
   esac
+
 
   export EDITOR=vim
   export PAGER='less'
