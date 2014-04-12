@@ -46,7 +46,7 @@ if [ "$PS1" ]; then
 
 
   export EDITOR=vim
-  export PAGER='less'
+  export PAGER="LESS='FRX' less"
   export PATH=$PATH:~/bin
 
   source ~/.git-completion.bash
