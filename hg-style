@@ -1,0 +1,1 @@
+changeset = '\033[0;33mcommit: {rev}:{node}\n\033[0mAuthor: {author}\nDate:   {date|rfc3339date} ({date|age})\n\n{fill(desc|strip, '72', '    ', '    ')}\n\n'
