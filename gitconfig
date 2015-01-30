@@ -10,7 +10,7 @@
   branch = auto
 
 [alias]
-  br = branch -v
+  br = branch -v -v
   co = checkout
   ci = commit
   di = diff
