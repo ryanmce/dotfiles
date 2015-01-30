@@ -16,6 +16,8 @@ highlight Search ctermbg=darkcyan
 set incsearch
 set hlsearch
 
+syntax on
+
 set nowrap
 
 " if disk is slow, this speeds things up
