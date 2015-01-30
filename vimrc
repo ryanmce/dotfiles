@@ -98,6 +98,10 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 
+" match xhp
+nmap <C-X> :set iskeyword=@,48-57,_,192-255<CR>
+nmap <C-X><C-X> :set iskeyword=@,48-57,_,192-255,:,-<CR>
+
 " special per-file directives
 augroup filetypes
   au BufRead,BufNewFile *         set ts=2 sw=2
