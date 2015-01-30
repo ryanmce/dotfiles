@@ -24,6 +24,9 @@ set nowrap
 "set noswapfile
 set directory=~/vimswp//
 
+" undo history
+set udf
+set udir=~/vimswp/undo//
 
 " normal tab settings
 set ts=2 sw=2
