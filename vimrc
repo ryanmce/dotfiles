@@ -22,7 +22,8 @@ set nowrap
 
 " if disk is slow, this speeds things up
 "set noswapfile
-set directory=~/vimswp,.
+set directory=~/vimswp//
+
 
 " normal tab settings
 set ts=2 sw=2
