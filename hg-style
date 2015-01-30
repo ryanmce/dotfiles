@@ -1,1 +1,5 @@
-changeset = '\033[0;33mcommit: {rev}:{node}\n\033[0mAuthor: {author}\nDate:   {date|rfc3339date} ({date|age})\n\n{fill(desc|strip, '72', '    ', '    ')}\n\n'
+#changeset = '\033[0;33mcommit: {rev}:{node}\n\033[0mAuthor: {author}\nDate:   {date|rfc3339date} ({date|age})\n\n{fill(desc|strip, '72', '    ', '    ')}\n\n'
+changeset = '{label("c.yellow", "commit: {node}")}\n{label("c.green", "Author: {author}")}\n{label("c.cyan", "Date:   {date|rfc3339date} ({date|age})")}\n\n{fill(desc|strip, '72', '    ', '    ')}\n\n'
+changeset_verbose = '{label("c.yellow", "commit: {node}")}\n{label("c.green", "Author: {author}")}\n{label("c.cyan", "Date:   {date|rfc3339date} ({date|age})")}\n\n{fill(desc|strip, '72', '    ', '    ')}\n\n{file_adds % \'{label("c.green", "A {file}")}\n\'}{file_dels % \'{label("c.red", "D {file}")}\n\'}{file_mods % \'{label("c.cyan", "M {file}")}\n\'}\n\n'
+changeset_quiet = '{ifcontains(rev, revset('.'), '@', ' ')}{shortest(node)} {desc|firstline}\n'
+
