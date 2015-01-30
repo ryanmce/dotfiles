@@ -105,6 +105,7 @@ nmap <C-X><C-X> :set iskeyword=@,48-57,_,192-255,:,-<CR>
 " special per-file directives
 augroup filetypes
   au BufRead,BufNewFile *         set ts=2 sw=2
+  au BufRead,BufNewFile *.as      set filetype=actionscript
   au BufRead,BufNewFile *.phpt    set filetype=php
   au BufRead,BufNewFile *.ic      set filetype=c
   au BufRead,BufNewFile *.py      set ts=4 sw=4
