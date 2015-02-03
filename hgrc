@@ -1,5 +1,4 @@
 [ui]
-username = Ryan McElroy <ryanmce@gmail.com>
 style = ~/.hg-style
 ignore.system = ~/.hgignore
 merge = vimdiff
