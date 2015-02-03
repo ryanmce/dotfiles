@@ -9,6 +9,11 @@ vimdiff.executable = vim
 vimdiff.args = -d -c "wincmd J" $output $local $other $base
 vimdiff.premerge = keep
 
+[diff]
+showfunc = True
+git = True
+noprefix = True
+
 [extensions]
 pager =
 #evolve=
@@ -16,5 +21,5 @@ pager =
 #lz4revlog=!
 
 [alias]
-gr = !$HG status --no-status --clean --modified --added --print0 . | xargs -0 grep --color --binary-files=without-match --regexp='$@' --
-sl = smartlog --template "{node|short}  {splitlines(desc) % '{if(startswith(\"Differential Revision\", line), label(\"custom.green\", line|word3|basename)) }'}  {author|user}  {bookmarks % '{ifeq(bookmark, current, label(\"custom.yellow\", \" {bookmark}*\"), label(\"custom.green\", \" {bookmark}\"))}'}\n{desc|firstline}\n\n"
+#gr = !$HG status --no-status --clean --modified --added --print0 . | xargs -0 grep --color --binary-files=without-match --regexp='$@' --
+
