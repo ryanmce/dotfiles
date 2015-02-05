@@ -59,21 +59,6 @@ if [ "$PS1" ]; then
   alias ga="git ci --amend --reset-author"
   alias gaa="git ci -a --amend -C HEAD --reset-author"
 
-  # If this is an xterm set the title to user@host:dir
-  #case $TERM in
-  #xterm*)
-  #    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
-  #    ;;
-  #*)
-  #    ;;
-  #esac
-
-  # enable programmable completion features (you don't need to enable
-  # this, if it's already enabled in /etc/bash.bashrc).
-  #if [ -f /etc/bash_completion ]; then
-  #  . /etc/bash_completion
-  #fi
-
 fi
 
 umask 002
