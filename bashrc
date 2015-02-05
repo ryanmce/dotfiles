@@ -50,8 +50,8 @@ if [ "$PS1" ]; then
   export LESS=FRX
   export PATH=$PATH:~/bin
 
-  source ~/.git-completion.bash
-  export PS1='\[\033[01;36m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\W$(__git_ps1 "(%s)") \[\033[01;36m\]$ \[\033[00m\]'
+  source ~/dotfiles/scm-prompt.sh
+  export PS1='\[\033[01;36m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\W$(_dotfiles_scm_info "(%s)") \[\033[01;36m\]$ \[\033[00m\]'
 
   # useful git aliases
   alias gs="git status"
