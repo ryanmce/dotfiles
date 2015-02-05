@@ -14,11 +14,13 @@ git = True
 noprefix = True
 
 [extensions]
-pager =
+color=
+pager=
 #evolve=
 #fbamend=!
 #lz4revlog=!
 
 [alias]
-#gr = !$HG status --no-status --clean --modified --added --print0 . | xargs -0 grep --color --binary-files=without-match --regexp='$@' --
-
+gr = !$HG status --no-status --clean --modified --added --print0 . | xargs -0 grep --color --binary-files=without-match --regexp='$@' --
+sl = smartlog --template "{node|short}  {splitlines(desc) % '{if(startswith(\"Differential Revision\", line), label(\"custom.green\", line|word3|basename)) }'}  {author|user}  {bookmarks % '{ifeq(bookmark, current, label(\"custom.yellow\", \" {bookmark}*\"), label(\"custom.green\", \" {bookmark}\"))}'}\n{desc|firstline}\n\n"
+show = !$HG log -vp -r $([[ -z "$1" ]] && echo . || echo $1)
