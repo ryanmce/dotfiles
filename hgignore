@@ -1,0 +1,8 @@
+syntax: glob
+*.sw[pno]
+cscope.*
+.codemod.bookmark
+
+syntax: regexp
+^TAGS$
+^tags$
