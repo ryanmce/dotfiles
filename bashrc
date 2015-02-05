@@ -51,7 +51,16 @@ if [ "$PS1" ]; then
   export PATH=$PATH:~/bin
 
   source ~/dotfiles/scm-prompt.sh
-  export PS1='\[\033[01;36m\]\u@\[\033[01;32m\]\h:\[\033[01;34m\]\W$(_dotfiles_scm_info "(%s)") \[\033[01;36m\]$ \[\033[00m\]'
+
+  color="\[\033"
+  teal="$color[01;36m\]"
+  green="$color[01;32m\]"
+  purple="$color[01;35m\]"
+  blue="$color[01;34m\]"
+  none="$color[00m\]"
+
+  scminfo='$(_dotfiles_scm_info "(%s)")'
+  export PS1="$teal\u@$green\h:$blue\W$purple$scminfo $teal\$$none "
 
   # useful git aliases
   alias gs="git status"
