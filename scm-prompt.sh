@@ -25,7 +25,19 @@
 _dotfiles_scm_info()
 {
   # find out if we're in a git or hg repo by looking for the control dir
-  local d git hg
+  local d git hg fmt
+  fmt=$1
+  if [[ -z "$fmt" ]]; then
+    if [ -n "$WANT_OLD_SCM_PROMPT" ]; then
+      fmt="%s"
+    else
+      # Be compatable with __git_ps1. In particular:
+      # - provide a space for the user so that they don't have to have
+      #   random extra spaces in their prompt when not in a repo
+      # - provide parens so it's differentiated from other crap in their prompt
+      fmt=" (%s)"
+    fi
+  fi
   d=$PWD
   while : ; do
     if test -d "$d/.git" ; then
@@ -109,15 +121,7 @@ _dotfiles_scm_info()
       fi
     fi
   fi
-  # Be compatable with __git_ps1. In particular:
-  # - provide a space for the user so that they don't have to have
-  #   random extra spaces in their prompt when not in a repo
-  # - provide parens so it's differentiated from other crap in their prompt
   if [ -n "$br" ]; then
-    if [ -n "$WANT_OLD_SCM_PROMPT" ]; then
-      printf %s "$br"
-    else
-      printf ' (%s)' "$br"
-    fi
+    printf $fmt "$br"
   fi
 }
