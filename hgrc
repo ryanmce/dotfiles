@@ -1,3 +1,6 @@
+# env-specific settings
+%include ~/.hgrc.local
+
 [ui]
 style = ~/.hg-style
 ignore.system = ~/.hgignore
@@ -16,9 +19,6 @@ noprefix = True
 [extensions]
 color=
 pager=
-#evolve=
-#fbamend=!
-#lz4revlog=!
 
 [alias]
 gr = !$HG status --no-status --clean --modified --added --print0 . | xargs -0 grep --color --binary-files=without-match --regexp='$@' --
