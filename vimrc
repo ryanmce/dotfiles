@@ -67,7 +67,7 @@ au BufWinEnter * set colorcolumn=81
 " au BufWinEnter * let w:m2=matchadd('OverLength', '\%>80v.\+', -1)
 
 " remember cursor position
-set viminfo='10,\"100,:20,%,n~/.viminfo
+set viminfo=<10000,s1000,'100,:200,%,h,n~/.viminfo
 
 function! ResCur()
   if line("'\"") <= line("$")
