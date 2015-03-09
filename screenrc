@@ -3,6 +3,9 @@ autodetach on
 startup_message off
 defscrollback 10000
 
+# http://unix.stackexchange.com/questions/46568/gnu-screen-freezes-trying-to-reattach
+nonblock on
+
 #termcapinfo xterm* ti@:te@              # fix the scroll 
 
 # better vim
