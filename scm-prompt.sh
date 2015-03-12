@@ -77,7 +77,7 @@ _dotfiles_scm_info()
       # check to see if active bookmark needs update
       local marks="$hg/.hg/bookmarks"
       if [[ -z "$extra" ]] && [[ -f "$marks" ]]; then
-        local markstate=$(grep " $br$" "$marks" | cut -f 1 -d ' ')
+        local markstate=$(grep --color=never " $br$" "$marks" | cut -f 1 -d ' ')
         if [[ $markstate != $dirstate ]]; then
           extra="|UPDATE_NEEDED"
         fi
