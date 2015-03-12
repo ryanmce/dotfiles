@@ -85,6 +85,13 @@ _dotfiles_scm_info()
     else
       br=$(echo $dirstate | cut -c 1-7)
     fi
+    local branch
+    if [[ -f $hg/.hg/branch ]]; then
+      branch=$(cat $hg/.hg/branch)
+      if [[ $branch != "default" ]]; then
+        br="$br|$branch"
+      fi
+    fi
     br="$br$extra"
   elif test -n "$git" ; then
     if test -f "$git/.git/HEAD" ; then
