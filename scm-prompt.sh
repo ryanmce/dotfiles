@@ -122,6 +122,6 @@ _dotfiles_scm_info()
     fi
   fi
   if [ -n "$br" ]; then
-    printf $fmt "$br"
+    printf "$fmt" "$br"
   fi
 }
