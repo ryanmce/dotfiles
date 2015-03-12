@@ -83,7 +83,7 @@ _dotfiles_scm_info()
         fi
       fi
     else
-      br=$(expr substr "$dirstate" 1 7)
+      br=$(echo $dirstate | cut -c 1-7)
     fi
     br="$br$extra"
   elif test -n "$git" ; then
@@ -91,10 +91,7 @@ _dotfiles_scm_info()
       read br < "$git/.git/HEAD"
       case $br in
         ref:\ refs/heads/*) br=${br#ref: refs/heads/} ;;
-        # Lop off all of an SHA1 except the leading 7 hex digits.
-        # Use this cumbersome notation (it's portabile) rather
-        # than ${br:0:7}, which doesn't work with older zsh.
-        *) br="${br%????????????????????????????????}" ;;
+        *) br=$(echo $br | cut -c 1-7) ;;
       esac
       if [ -f "$git/.git/rebase-merge/interactive" ]; then
         b="$(cat "$git/.git/rebase-merge/head-name")"
