@@ -85,6 +85,14 @@ _dotfiles_scm_info()
     else
       br=$(echo $dirstate | cut -c 1-7)
     fi
+    local remote="$hg/.hg/remotenames"
+    if [[ -f "$remote" ]]; then
+      local marks=$(grep --color=never "^$dirstate bookmarks" "$remote" | \
+        cut -f 3 -d ' ' | tr '\n' '|' | head -c -1)
+      if [[ -n "$marks" ]]; then
+        br="$br|$marks"
+      fi
+    fi
     local branch
     if [[ -f $hg/.hg/branch ]]; then
       branch=$(cat $hg/.hg/branch)
