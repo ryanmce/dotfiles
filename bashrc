@@ -69,7 +69,7 @@ blue="$color[01;34m\]"
 none="$color[00m\]"
 
 scminfo='$(_dotfiles_scm_info "(%s)")'
-export PS1="$teal\u@$green\h:$blue\W$purple$scminfo $teal\$$none "
+export PS1="$teal\u@$green${HOSTNAME%.facebook.com}:$blue\w$purple$scminfo $green[\j] $teal\$$none "
 
 # useful git aliases
 alias gs="git status"
