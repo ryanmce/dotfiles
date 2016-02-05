@@ -1,26 +1,51 @@
-# Determines the "branch" of the current repo and emits it.
-# For use in generating the prompt.
-# This is portable to both zsh and bash and works in both
-# git and mercurial repos and aims to avoid invoking the
-# command line utilities for speed of prompt updates
-
-# To use from zsh:
-#  NOTE! the single quotes are important; if you use double quotes
-#  then the prompt won't change when you chdir or checkout different
-#  branches!
+# Copyright (C) 2015 Facebook, Inc
+# Maintained by Ryan McElroy <rm@fb.com>
 #
-#  . /mnt/vol/engshare/admin/scripts/scm-prompt
-#  setopt PROMPT_SUBST
-#  export PS1='$(_dotfiles_scm_info)$USER@%m:%~%% '
+# Inspiration and derivation from git-completion.bash by Shawn O. Pearce
+#
+# Distributed under the GNU General Public License, version 2.0.
+#
+# ========================================================================
+#
+# Quickly determines the and emits some useful information about the state
+# of your current mercurial or git repository. Useful for PS1 prompts.
+#
+# Design goals:
+#  * Useful for both git and mercurial
+#  * Portable to both zsh and bash
+#  * Portable to both Mac (BSD-based utils) and Linux (GNU-based utils)
+#  * As fast as possible given the above constraints (few command invocations)
+#  * Avoids invoking git or mercurial, which may be slow on large repositories
+#
+# To use from zsh:
+#
+#   NOTE! the single quotes are important; if you use double quotes
+#   then the prompt won't change when you chdir or checkout different
+#   branches!
+#
+#   . /path/to/scm-prompt
+#   setopt PROMPT_SUBST
+#   export PS1='$(_dotfiles_scm_info)$USER@%m:%~%% '
 
 # To use from bash:
 #
-#  . /mnt/vol/engshare/admin/scripts/scm-prompt
-#  export PS1="\$(_dotfiles_scm_info)\u@\h:\W\$ "
+#   . /path/to/scm-prompt
+#   export PS1="\$(_dotfiles_scm_info)\u@\h:\W\$ "
 #
 # NOTE! You *EITHER* need to single-quote the whole thing *OR* back-slash
 # the $(...) (as above), but not both. Which one you use depends on if
 # you need the rest of your PS1 to interpolate variables.
+#
+# You may additionally pass a format-string to the scm_info command. This
+# allows you to control the format of the prompt string without interfering
+# with the prompt outside of a mercurial or git repository. For example:
+#
+#   _dotfiles_scm_info "%s"
+#
+# The default format string is " (%s)"
+#
+# =========================================================================
+#
 
 _dotfiles_scm_info()
 {
@@ -48,8 +73,7 @@ _dotfiles_scm_info()
       break
     fi
     test "$d" = / && break
-    # portable "realpath" equivalent
-    d=$(cd "$d/.." && echo "$PWD")
+    d=$(cd -P "$d/.." && echo "$PWD")
   done
 
   local br
@@ -76,6 +100,9 @@ _dotfiles_scm_info()
       br=$(cat "$current")
       # check to see if active bookmark needs update
       local marks="$hg/.hg/bookmarks"
+      if [ -f "$hg/.hg/sharedpath" ]; then
+          marks="`cat $hg/.hg/sharedpath`/bookmarks"
+      fi
       if [[ -z "$extra" ]] && [[ -f "$marks" ]]; then
         local markstate=$(grep --color=never " $br$" "$marks" | cut -f 1 -d ' ')
         if [[ $markstate != $dirstate ]]; then
@@ -88,7 +115,7 @@ _dotfiles_scm_info()
     local remote="$hg/.hg/remotenames"
     if [[ -f "$remote" ]]; then
       local marks=$(grep --color=never "^$dirstate bookmarks" "$remote" | \
-        cut -f 3 -d ' ' | tr '\n' '|' | head -c -1)
+        cut -f 3 -d ' ' | tr '\n' '|' | sed 's/.$//')
       if [[ -n "$marks" ]]; then
         br="$br|$marks"
       fi
