@@ -40,7 +40,6 @@ export HISTSIZE=1000000
 export HISTCONTROL=ignoredups
 export HISTIGNORE="pwd:ls:ls -l:"
 export HISTTIMEFORMAT='%F %T '
-#export PROMPT_COMMAND='history -a; history -n'
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -56,6 +55,8 @@ case ${TERM} in
     ;;
 esac
 
+# immediately append history
+#export PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
 
 export EDITOR=vim
 export PAGER=less
