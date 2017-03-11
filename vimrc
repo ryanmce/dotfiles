@@ -71,7 +71,7 @@ au BufWinEnter * let w:m1=matchadd('TrailingWhitespace', '\s\+$', -1)
 " highlight long linesa
 au BufWinEnter * highlight ColorColumn ctermbg=235
 au BufWinEnter * set colorcolumn=81
-" au BufWinEnter * highlight OverLength ctermbg=darkblue ctermfg=white 
+" au BufWinEnter * highlight OverLength ctermbg=darkblue ctermfg=white
 " au BufWinEnter * let w:m2=matchadd('OverLength', '\%>80v.\+', -1)
 
 " remember cursor position
