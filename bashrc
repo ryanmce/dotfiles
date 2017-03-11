@@ -13,6 +13,9 @@ if [ -f ~/.bashrc_fb ]; then
   source ~/.bashrc_fb
 fi
 
+# don't make ctrl-s stop the terminal
+stty stop undef
+
 # useful stuff for screen
 alias scr="screen -r -d"
 
