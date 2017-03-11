@@ -58,6 +58,9 @@ esac
 # immediately append history
 #export PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
 
+# show up to three previous dirs
+export PROMPT_DIRTRIM=3
+
 export EDITOR=vim
 export PAGER=less
 export LESS=FRX
