@@ -32,7 +32,7 @@ set udir=~/vimswp/undo//
 set ts=2 sw=2
 set sts=0 smarttab expandtab nolist
 set smartindent
-set cindent
+"set cindent
 
 " autoextend comments
 set fo=cqtr
