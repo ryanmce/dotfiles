@@ -73,6 +73,8 @@ teal="$color[01;36m\]"
 green="$color[01;32m\]"
 purple="$color[01;35m\]"
 blue="$color[01;34m\]"
+red="$color[1;31m\]"
+grey="$color[1;30m\]"
 none="$color[00m\]"
 
 scminfo='$(_dotfiles_scm_info "(%s)")'
