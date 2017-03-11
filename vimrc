@@ -47,7 +47,7 @@ set laststatus=2
 " blame ftw
 vmap gb :<C-U>!cd $(dirname $(realpath %)) && git blame $(basename %) -L<C-R>=line("'<") <CR>,<C-R>=line("'>") <CR><CR>
 nmap gb :!cd $(dirname $(realpath %)) && git blame $(basename %)<CR>
-vmap hb :<C-U>!hg blame -wbfcduq <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
+vmap hb :<C-U>!hg blame -wbfcduqp <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR>
 
 " for cscope
 nmap <C-@><C-@> :cs find s <C-R>=expand("<cword>")<CR><CR>
