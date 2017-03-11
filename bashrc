@@ -65,8 +65,6 @@ export PAGER=less
 export LESS=FRX
 export PATH=$PATH:~/bin
 
-source ~/dotfiles/scm-prompt.sh
-
 color="\[\033"
 teal="$color[01;36m\]"
 green="$color[01;32m\]"
@@ -90,6 +88,7 @@ function prompt_status {
   fi
 }
 
+source ~/dotfiles/scm-prompt.sh
 scminfo='$(_dotfiles_scm_info "(%s)")'
 export PS1="$teal\u@$green${HOSTNAME%.facebook.com}:$blue\w$purple$scminfo $green[\j] $teal\$$none "
 
