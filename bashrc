@@ -77,6 +77,20 @@ red="$color[1;31m\]"
 grey="$color[1;30m\]"
 none="$color[00m\]"
 
+function prompt_status {
+  local pipes="${PIPESTATUS[*]}"
+  local allZeros=true
+  for status in ${pipes[@]}; do
+    if [ $status != 0 ]; then
+      allZeros=false
+    fi
+  done
+  if [ $allZeros != true ]; then
+    printf " [Exit: ${pipes[@]}]"
+    true
+  fi
+}
+
 scminfo='$(_dotfiles_scm_info "(%s)")'
 export PS1="$teal\u@$green${HOSTNAME%.facebook.com}:$blue\w$purple$scminfo $green[\j] $teal\$$none "
 
