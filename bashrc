@@ -46,12 +46,13 @@ export HISTTIMEFORMAT='%F %T '
 # update the values of LINES and COLUMNS.
 #shopt -s checkwinsize
 
-# update screen window names with cwd
 case ${TERM} in
   screen*)
+    # update screen window names with cwd
     export PROMPT_COMMAND='echo -ne "\033k$(basename "$PWD")\033\\"'
     ;;
   *)
+    # otherwise update title of window with hostname
     export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}\007"'
     ;;
 esac
