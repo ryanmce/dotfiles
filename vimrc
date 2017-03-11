@@ -54,6 +54,9 @@ nmap <C-@><C-@> :cs find s <C-R>=expand("<cword>")<CR><CR>
 set nocscopetag
 set csto=1
 
+" search up the directory tree for tags
+set tags=tags;/
+
 filetype plugin indent on
 
 " highlight tabs
