@@ -30,6 +30,7 @@
 
 [svn]
   followparent = true
+  rmdir = true
 
 [include]
   path = ~/.git-user
