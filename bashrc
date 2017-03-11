@@ -103,3 +103,5 @@ alias gaa="git ci -a --amend -C HEAD --reset-author"
 alias hs='hg st'
 alias ha='hg commit --amend --date now -X "*"'
 alias haa='hg commit --amend --date now --message "$(hg log -T {desc} -r .)"'
+
+export SSH_AUTH_SOCK=/var/run/ssh-agent/agent.2400
