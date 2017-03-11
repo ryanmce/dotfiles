@@ -39,6 +39,9 @@ export HISTCONTROL=ignoredups
 export HISTIGNORE="pwd:ls:ls -l:"
 export HISTTIMEFORMAT='%F %T '
 
+# immediately append history
+#export PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 #shopt -s checkwinsize
@@ -52,9 +55,6 @@ case ${TERM} in
     export PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}\007"'
     ;;
 esac
-
-# immediately append history
-#export PROMPT_COMMAND="history -a; history -n; $PROMPT_COMMAND"
 
 # show up to three previous dirs
 export PROMPT_DIRTRIM=3
