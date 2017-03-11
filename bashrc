@@ -2,8 +2,6 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-umask 002
-
 # If not running interactively, then exit now:
 if [ ! "$PS1" ]; then
   return
@@ -15,6 +13,8 @@ fi
 
 # don't make ctrl-s stop the terminal
 stty stop undef
+
+umask 002
 
 # useful stuff for screen
 alias scr="screen -r -d"
