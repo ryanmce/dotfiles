@@ -63,6 +63,11 @@ filetype plugin indent on
 au BufWinEnter * highlight BadTab ctermbg=darkblue
 au BufWinEnter * let w:m1=matchadd('BadTab', '\t', -1)
 
+" highlight trailing whitespace
+au BufWinEnter * highlight TrailingWhitespace ctermbg=darkred
+au BufWinEnter * let w:m1=matchadd('TrailingWhitespace', '\s\+$', -1)
+
+
 " highlight long linesa
 au BufWinEnter * highlight ColorColumn ctermbg=235
 au BufWinEnter * set colorcolumn=81
