@@ -98,3 +98,8 @@ alias gs="git status"
 alias gd="git diff --numstat HEAD^"
 alias ga="git ci --amend --reset-author"
 alias gaa="git ci -a --amend -C HEAD --reset-author"
+
+# useful mercurial aliases
+alias hs='hg st'
+alias ha='hg commit --amend --date now -X "*"'
+alias haa='hg commit --amend --date now --message "$(hg log -T {desc} -r .)"'
