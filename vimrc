@@ -120,6 +120,7 @@ augroup filetypes
   au BufRead,BufNewFile *.cinc    set ts=4 sw=4 filetype=python
   au BufRead,BufNewFile *.cconf   set ts=4 sw=4 filetype=python
   au BufRead,BufNewFile TARGETS   set ts=4 sw=4 filetype=python
+  au BufRead,BufNewFile *.tw      set ts=4 sw=4 filetype=python
   au BufRead,BufNewFile Makefile* set ts=4 sw=4 noexpandtab
 augroup END
 
