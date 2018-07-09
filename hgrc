@@ -1,5 +1,8 @@
 # env-specific settings
-%include ~/.hgrc.local
+%include ~/.hgrc.dev
+
+[trusted]
+groups=users
 
 [ui]
 ignore.system = ~/.hgignore
@@ -13,50 +16,67 @@ vimdiff.premerge = keep
 [diff]
 showfunc = True
 git = True
-noprefix = True
+#noprefix = True
+
+[experimental]
+revertalternateinteractivemode=False
+graphshorten=True
 
 [extensions]
 color=
-pager=
+#pager=
+patchbomb=
+b2xcompat=!
+convert=
+#hggit=
+#crash=/home/quark/hgext/crash.py
+
+[templatealias]
+oneline = "{ifcontains(rev, revset('.'), label('green', '@'), ' ')}{sl_node} {label('bold', pad(author|user, 12))} {desc|firstline}"
+sl_use_short_header=False
 
 [alias]
-show = !$HG log -vp -r $([[ -z "$1" ]] && echo . || echo $1)
+ol = sl -T '{oneline}'
+st = status -C
+getpatch=import --partial http://hgpatch.lihdd.net/$1
+threadapply=import --partial http://hgpatch.lihdd.net/$1/thread
+oneline = log -T "{oneline}\n"
+ll = oneline --pager true --color true -f -r top
+curlog = oneline -r cur
+cl = curlog --pager true --color true
+gl = log --graph --all --pager=always --template '{sl}'
 
-[color]
-desc.here = inverse
-status.modified = cyan
-status.added = green
-status.removed = red
-status.deleted = yellow bold underline
-status.unknown = magenta bold underline
-status.ignored = yellow underline
-status.copied = green underline
-diff.diffline = none
-diff.extended = cyan
-diff.file_a = red
-diff.file_b = green
-diff.hunk = yellow bold
-diff.deleted = red
-diff.inserted = green
-diff.changed = white
-diff.trailingwhitespace = white_background
-qseries.applied = blue bold underline
-qseries.unapplied = cyan bold
-qseries.missing = red bold
-#bookmarks.current = magenta bold
-tags.normal = green
-log.tag = green
-log.bookmark = magenta
-log.branch = blue bold
-log.date = green bold
-log.user = yellow
-log.manifest = green bold underline
-log.extra = yellow bold underline
-log.remotename = red dim
-log.remotebookmark = red dim
-log.remotebranch = cyan
-changeset.public = blue
-changeset.draft = green
-changeset.secret = red bold
-#changeset.merge = foo
-changeset.obsolete = italic
+[patchbomb]
+confirm = True
+intro = never
+
+[email]
+from=Ryan McElroy <rm@fb.com>
+
+[revsetalias]
+cur = reverse(only(last(.::),present(master)+present(@)))
+top = last(.::)
+bot = first(.%master)
+#r($1) = reverse($1)
+#stack = r(.%master)
+next = max(children(.))
+prev = .^
+
+[progress]
+delay=0.1
+changedelay=0.1
+refresh=0.1
+
+[committemplate]
+reviewers =
+  HG: #sourcecontrol
+  HG: #mercurial
+summary =
+    HG: #accept2ship
+title = []
+
+[pager]
+attend-config=false
+
+[hint]
+ack = hack-ack hint-ack
