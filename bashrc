@@ -86,7 +86,7 @@ function prompt_status {
 }
 
 source ~/dotfiles/scm-prompt.sh
-scminfo='$(_dotfiles_scm_info "(%s)")'
+scminfo='$(_scm_prompt "(%s)")'
 pstatus='$(prompt_status)'
 export PS1="$grey[\D{%F %H:%M:%S}] $teal\u@$green${HOSTNAME%.facebook.com}:$blue\w$purple$scminfo $green[\j]$red${pstatus}$none\n\$ "
 

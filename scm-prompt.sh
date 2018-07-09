@@ -1,7 +1,7 @@
 # Copyright (C) 2015 Facebook, Inc
 # Maintained by Ryan McElroy <rm@fb.com>
 #
-# Inspiration and derivation from git-completion.bash by Shawn O. Pearce
+# Inspiration and derivation from git-completion.bash by Shawn O. Pearce.
 #
 # Distributed under the GNU General Public License, version 2.0.
 #
@@ -23,144 +23,227 @@
 #   then the prompt won't change when you chdir or checkout different
 #   branches!
 #
-#   . /path/to/scm-prompt
 #   setopt PROMPT_SUBST
-#   export PS1='$(_dotfiles_scm_info)$USER@%m:%~%% '
-
+#   source /path/to/scm-prompt
+#   export PS1='$(_scm_prompt)$USER@%m:%~%% '
+#
 # To use from bash:
 #
-#   . /path/to/scm-prompt
-#   export PS1="\$(_dotfiles_scm_info)\u@\h:\W\$ "
+#   source /path/to/scm-prompt
+#   export PS1="\$(_scm_prompt)\u@\h:\W\$ "
 #
-# NOTE! You *EITHER* need to single-quote the whole thing *OR* back-slash
-# the $(...) (as above), but not both. Which one you use depends on if
-# you need the rest of your PS1 to interpolate variables.
+#   NOTE! You *EITHER* need to single-quote the whole thing *OR* back-slash
+#   the $(...) (as above), but not both. Which one you use depends on if
+#   you need the rest of your PS1 to interpolate variables.
 #
 # You may additionally pass a format-string to the scm_info command. This
 # allows you to control the format of the prompt string without interfering
 # with the prompt outside of a mercurial or git repository. For example:
 #
-#   _dotfiles_scm_info "%s"
+#   $(_scm_prompt "%s")
 #
-# The default format string is " (%s)"
+# The default format string is " (%s)" (note the space)
+#
+# Options: you may want to set these environment variables
+#  * HOME_IS_NOT_A_REPO : Stop walking up the filesystem looking for a git or
+#    hg repo at (but not including) /home instead of /.  This helps when /home
+#    is a remote or autofs mount point.
+#  * WANT_OLD_SCM_PROMPT : Use '%s' as the formatting for the prompt instead
+#    of ' (%s)'
+#
+# Notes to developers:
+#
+#  * Aliases can screw up the default commands. To prevent this issue, use
+#    the 'builtin' prefix for built-in shell commands (eg, 'cd' and 'echo')
+#    and use the 'command' prefix for external commands that you do not want
+#    to invoke aliases for (eg, 'grep', 'cut').
 #
 # =========================================================================
 #
 
-_dotfiles_scm_info()
-{
-  # find out if we're in a git or hg repo by looking for the control dir
-  local d git hg fmt
-  fmt=$1
-  if [[ -z "$fmt" ]]; then
-    if [ -n "$WANT_OLD_SCM_PROMPT" ]; then
-      fmt="%s"
-    else
-      # Be compatable with __git_ps1. In particular:
-      # - provide a space for the user so that they don't have to have
-      #   random extra spaces in their prompt when not in a repo
-      # - provide parens so it's differentiated from other crap in their prompt
-      fmt=" (%s)"
+_find_most_relevant() {
+    # We don't want to output all remote bookmarks because there can be many
+    # of them. This function finds the most relevant remote bookmark using this
+    # algorithm:
+    # 1. If 'master' or '@' bookmark is available then output it
+    # 2. Sort remote bookmarks and output the first in reverse sorted order (
+    # it's a heuristic that tries to find the newest bookmark. It will work well
+    # with bookmarks like 'release20160926' and 'release20161010').
+    relevantbook="$(command grep -m1 -E -o "^[^/]+/(master|@)$" <<< "$1")"
+    if [[ -n $relevantbook ]]; then
+        builtin echo $relevantbook
+        return 0
+    fi
+
+    builtin echo "$(command sort -r <<< "$1" | command head -n 1)"
+}
+
+_hg_prompt() {
+  local hg br extra
+  hg="$1"
+
+  if [[ -f "$hg/bisect.state" ]]; then
+    extra="|BISECT"
+  elif [[ -f "$hg/histedit-state" ]]; then
+    extra="|HISTEDIT"
+  elif [[ -f "$hg/graftstate" ]]; then
+    extra="|GRAFT"
+  elif [[ -f "$hg/unshelverebasestate" ]]; then
+    extra="|UNSHELVE"
+  elif [[ -f "$hg/rebasestate" ]]; then
+    extra="|REBASE"
+  elif [[ -d "$hg/merge" ]]; then
+    extra="|MERGE"
+  elif [[ -L "$hg/store/lock" ]]; then
+    extra="|STORE-LOCKED"
+  elif [[ -L "$hg/wlock" ]]; then
+    extra="|WDIR-LOCKED"
+  fi
+  local dirstate="$( \
+    ( [[ -f "$hg/dirstate" ]] && \
+    command hexdump -vn 20 -e '1/1 "%02x"' "$hg/dirstate") || \
+    builtin echo "empty")"
+
+  local remote="$hg/remotenames"
+  local shared_hg="$hg"
+  if [[ -f "$hg/sharedpath" ]]; then
+    shared_hg="$(command cat $hg/sharedpath)"
+    remote="$shared_hg/remotenames"
+  fi
+
+  local active="$hg/bookmarks.current"
+  if  [[ -f "$active" ]]; then
+    br="$(command cat "$active")"
+    # check to see if active bookmark needs update (eg, moved after pull)
+    local marks="$hg/bookmarks"
+    if [[ -f "$hg/sharedpath" && -f "$hg/shared" ]] &&
+        command grep -q '^bookmarks$' "$hg/shared"; then
+      marks="$shared_hg/bookmarks"
+    fi
+    if [[ -z "$extra" ]] && [[ -f "$marks" ]]; then
+      local markstate="$(command grep " $br$" "$marks" | \
+        command cut -f 1 -d ' ')"
+      if [[ $markstate != "$dirstate" ]]; then
+        extra="|UPDATE_NEEDED"
+      fi
+    fi
+  else
+    br="$(builtin echo "$dirstate" | command cut -c 1-7)"
+  fi
+  if [[ -f "$remote" ]]; then
+    local allremotemarks="$(command grep "^$dirstate bookmarks" "$remote" | \
+      command cut -f 3 -d ' ')"
+
+    if [[ -n "$allremotemarks" ]]; then
+        local remotemark="$(_find_most_relevant "$allremotemarks")"
+        if [[ -n "$remotemark" ]]; then
+          br="$br|$remotemark"
+          if [[ "$remotemark" != "$allremotemarks" ]]; then
+            # if there is more than one, let the user know with an elipsis
+            br="${br}..."
+          fi
+        fi
     fi
   fi
-  d=$PWD
+  local branch
+  if [[ -f "$hg/branch" ]]; then
+    branch="$(command cat "$hg/branch")"
+    if [[ "$branch" != "default" ]]; then
+      br="$br|$branch"
+    fi
+  fi
+  br="$br$extra"
+  builtin printf "%s" "$br"
+}
+
+_git_prompt() {
+  local git br
+  git="$1"
+  if [[ -f "$git/HEAD" ]]; then
+    read br < "$git/HEAD"
+    case $br in
+      ref:\ refs/heads/*) br=${br#ref: refs/heads/} ;;
+      *) br="$(builtin echo "$br" | command cut -c 1-7)" ;;
+    esac
+    if [[ -f "$git/rebase-merge/interactive" ]]; then
+      b="$(command cat "$git/rebase-merge/head-name")"
+      b="${b#refs/heads/}"
+      br="$br|REBASE-i|$b"
+    elif [[ -d "$git/rebase-merge" ]]; then
+      b="$(command cat "$git/rebase-merge/head-name")"
+      b="${b#refs/heads/}"
+      br="$br|REBASE-m|$b"
+    else
+      if [[ -d "$git/rebase-apply" ]]; then
+        if [[ -f "$git/rebase-apply/rebasing" ]]; then
+          b="$(command cat "$git/rebase-apply/head-name")"
+          b="${b#refs/heads/}"
+          br="$br|REBASE|$b"
+        elif [[ -f "$git/rebase-apply/applying" ]]; then
+          br="$br|AM"
+        else
+          br="$br|AM/REBASE"
+        fi
+      elif [[ -f "$git/CHERRY_PICK_HEAD" ]]; then
+        br="$br|CHERRY-PICKING"
+      elif [[ -f "$git/REVERT_HEAD" ]]; then
+        br="$br|REVERTING"
+      elif [[ -f "$git/MERGE_HEAD" ]]; then
+        br="$br|MERGE"
+      elif [[ -f "$git/BISECT_LOG" ]]; then
+        br="$br|BISECT"
+      fi
+    fi
+  fi
+  builtin printf "%s" "$br"
+}
+
+_scm_prompt() {
+  local dir fmt br
+  # Default to be compatable with __git_ps1. In particular:
+  # - provide a space for the user so that they don't have to have
+  #   random extra spaces in their prompt when not in a repo
+  # - provide parens so it's differentiated from other crap in their prompt
+  fmt="${1:- (%s)}"
+
+  # find out if we're in a git or hg repo by looking for the control dir
+  dir="$PWD"
   while : ; do
-    if test -d "$d/.git" ; then
-      git=$d
+    [[ -n "$HOME_IS_NOT_A_REPO" ]] && [[ "$dir" = "/home" ]] && break
+    if [[ -d "$dir/.git" ]]; then
+      br="$(_git_prompt "$dir/.git")"
       break
-    elif test -d "$d/.hg" ; then
-      hg=$d
+    elif [[ -d "$dir/.hg" ]]; then
+      br="$(_hg_prompt "$dir/.hg")"
       break
     fi
-    test "$d" = / && break
-    d=$(cd -P "$d/.." && echo "$PWD")
+    [[ "$dir" = "/" ]] && break
+    # portable "realpath" equivalent
+    dir="$(builtin cd -P "$dir/.." && builtin echo "$PWD")"
   done
 
-  local br
-  if test -n "$hg" ; then
-    local extra
-    if [ -f "$hg/.hg/bisect.state" ]; then
-      extra="|BISECT"
-    elif [ -f "$hg/.hg/histedit-state" ]; then
-      extra="|HISTEDIT"
-    elif [ -f "$hg/.hg/graftstate" ]; then
-      extra="|GRAFT"
-    elif [ -f "$hg/.hg/unshelverebasestate" ]; then
-      extra="|UNSHELVE"
-    elif [ -f "$hg/.hg/rebasestate" ]; then
-      extra="|REBASE"
-    elif [ -d "$hg/.hg/merge" ]; then
-      extra="|MERGE"
-    fi
-    local dirstate=$(test -f $hg/.hg/dirstate && \
-      hexdump -vn 20 -e '1/1 "%02x"' $hg/.hg/dirstate || \
-      echo "empty")
-    local current="$hg/.hg/bookmarks.current"
-    if  [[ -f "$current" ]]; then
-      br=$(cat "$current")
-      # check to see if active bookmark needs update
-      local marks="$hg/.hg/bookmarks"
-      if [ -f "$hg/.hg/sharedpath" ]; then
-          marks="`cat $hg/.hg/sharedpath`/bookmarks"
-      fi
-      if [[ -z "$extra" ]] && [[ -f "$marks" ]]; then
-        local markstate=$(grep --color=never " $br$" "$marks" | cut -f 1 -d ' ')
-        if [[ $markstate != $dirstate ]]; then
-          extra="|UPDATE_NEEDED"
-        fi
-      fi
+  if [[ -n "$br" ]]; then
+    builtin printf "$fmt" "$br"
+  fi
+}
+
+#
+# Backwards-compatibility layer for odl scm-prompt script
+#
+# Older versions of this file at Facebook used a longer function name.
+# These versions also included support for an environmental directive
+# called $WANT_OLD_SCM_PROMPT. Support this to remain compatible.
+#
+
+_dotfiles_scm_info() {
+  local fmt
+  fmt=$1
+  if [[ -z "$fmt" ]]; then
+    if [[ -n "$WANT_OLD_SCM_PROMPT" ]]; then
+      fmt="%s"
     else
-      br=$(echo $dirstate | cut -c 1-7)
-    fi
-    local remote="$hg/.hg/remotenames"
-    if [[ -f "$remote" ]]; then
-      local marks=$(grep --color=never "^$dirstate bookmarks" "$remote" | \
-        cut -f 3 -d ' ' | tr '\n' '|' | sed 's/.$//')
-      if [[ -n "$marks" ]]; then
-        br="$br|$marks"
-      fi
-    fi
-    local branch
-    if [[ -f $hg/.hg/branch ]]; then
-      branch=$(cat $hg/.hg/branch)
-      if [[ $branch != "default" ]]; then
-        br="$br|$branch"
-      fi
-    fi
-    br="$br$extra"
-  elif test -n "$git" ; then
-    if test -f "$git/.git/HEAD" ; then
-      read br < "$git/.git/HEAD"
-      case $br in
-        ref:\ refs/heads/*) br=${br#ref: refs/heads/} ;;
-        *) br=$(echo $br | cut -c 1-7) ;;
-      esac
-      if [ -f "$git/.git/rebase-merge/interactive" ]; then
-        b="$(cat "$git/.git/rebase-merge/head-name")"
-        b=${b#refs/heads/}
-        br="$br|REBASE-i|$b"
-      elif [ -d "$git/.git/rebase-merge" ]; then
-        b="$(cat "$git/.git/rebase-merge/head-name")"
-        b=${b#refs/heads/}
-        br="br|REBASE-m|$b"
-      else
-        if [ -d "$git/.git/rebase-apply" ]; then
-          if [ -f "$git/.git/rebase-apply/rebasing" ]; then
-            br="$br|REBASE"
-          elif [ -f "$git/.git/rebase-apply/applying" ]; then
-            br="$br|AM"
-          else
-            br="$br|AM/REBASE"
-          fi
-        elif [ -f "$git/.git/MERGE_HEAD" ]; then
-          br="$br|MERGE"
-        elif [ -f "$git/.git/BISECT_LOG" ]; then
-          br="$br|BISECT"
-        fi
-      fi
+      fmt=' (%s)'
     fi
   fi
-  if [ -n "$br" ]; then
-    printf "$fmt" "$br"
-  fi
+  _scm_prompt "$fmt"
 }
