@@ -2,7 +2,6 @@
 %include ~/.hgrc.local
 
 [ui]
-style = ~/.hg-style
 ignore.system = ~/.hgignore
 merge = vimdiff
 
