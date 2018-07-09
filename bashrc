@@ -60,7 +60,7 @@ export PROMPT_DIRTRIM=3
 export EDITOR=vim
 export PAGER=less
 export LESS=FRX
-export PATH=$PATH:~/bin
+export PATH=~/bin:$PATH
 
 color="\[\033"
 teal="$color[01;36m\]"
