@@ -116,6 +116,7 @@ augroup filetypes
   au BufRead,BufNewFile *.as      set filetype=actionscript
   au BufRead,BufNewFile *.phpt    set filetype=php
   au BufRead,BufNewFile *.ic      set filetype=c
+  au BufRead,BufNewFile *.rs      set ts=4 sw=4
   au BufRead,BufNewFile *.py      set ts=4 sw=4
   au BufRead,BufNewFile *.cinc    set ts=4 sw=4 filetype=python
   au BufRead,BufNewFile *.cconf   set ts=4 sw=4 filetype=python
