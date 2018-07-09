@@ -18,6 +18,7 @@ hardstatus string '%{= kG}%-Lw%{= kW}%50> %n*%f %t%{= kG}%+Lw%< %{= kG}'
 
 # enable 256 color
 attrcolor b ".I"
+term screen-256color
 defbce "on"
 
 # don't resize screen on start
